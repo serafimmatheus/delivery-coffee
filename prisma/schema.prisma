@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Coffee {
+  id               String             @id @default(uuid())
+  name             String
+  slug             String             @unique
+  description      String
+  coverImage       String
+  price            Decimal            @db.Decimal(8, 2)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  coffeeToCategory CoffeeToCategory[]
+
+  @@map("coffees")
+}
+
+model Category {
+  id               String             @id @default(uuid())
+  name             String
+  slug             String             @unique
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  coffeeToCategory CoffeeToCategory[]
+
+  @@map("categories")
+}
+
+model CoffeeToCategory {
+  id         String   @id @default(uuid())
+  coffeeId   String
+  categoryId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  coffee     Coffee   @relation(fields: [coffeeId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  @@map("coffees_to_categories")
+}
