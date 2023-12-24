@@ -2,12 +2,12 @@ import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBv0z8XlV6J4IFs41QsBlRff9w_NiN1YFA",
-  authDomain: "coffee-delivery-416bb.firebaseapp.com",
-  projectId: "coffee-delivery-416bb",
-  storageBucket: "coffee-delivery-416bb.appspot.com",
-  messagingSenderId: "830346605895",
-  appId: "1:830346605895:web:e57638daedbd065cccc862",
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKETS,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID,
 };
 
 // Initialize Firebase
