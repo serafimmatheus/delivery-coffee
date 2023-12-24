@@ -26,7 +26,7 @@ const CardCoffee = ({ coffee }: CardCoffeeProps) => {
       message: `${coffee.name} adicionado ao carrinho!`,
       description:
         "Acesse o carrinho para finalizar o pedido ou continue comprando.",
-      duration: 2,
+      duration: 3,
       placement: "bottomRight",
     });
   };
