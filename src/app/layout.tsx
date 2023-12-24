@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import HeaderDesktop from "@/components/headerDesktop";
-import { CartProvider } from "@/provider/cart/cart";
-import { AuthProvider } from "@/provider/auth/auth";
 import { ProviderCoffee } from "@/provider";
 
 const roboto = Roboto({

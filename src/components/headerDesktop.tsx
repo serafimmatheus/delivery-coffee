@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  MapPin,
-  ShoppingCart,
-  UserMinus,
-} from "@phosphor-icons/react/dist/ssr";
+import { ShoppingCart, UserMinus } from "@phosphor-icons/react/dist/ssr";
 import { Badge, Button } from "antd";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,7 +8,6 @@ import { useState } from "react";
 import CartDrawer from "./cart";
 import { useAuthProviver } from "@/provider/auth/auth";
 import { logout } from "@/actions/auth.actions";
-import BadgeAddress from "./badge-address";
 
 const HeaderDesktop = () => {
   const [open, setOpen] = useState<boolean>(false);

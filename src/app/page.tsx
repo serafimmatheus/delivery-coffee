@@ -8,7 +8,6 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { Badge } from "antd";
 import Image from "next/image";
-import { Suspense } from "react";
 
 export default async function HomePage() {
   const coffees = await prismaClient.coffee.findMany({
@@ -84,9 +83,7 @@ export default async function HomePage() {
       <div className="mt-10 lg:mt-36">
         <h2 className="text-3xl font-semibold">Nossos cafés</h2>
 
-        <Suspense fallback={"carregando..."}>
-          <LinstingCardCoffee coffees={coffees} />
-        </Suspense>
+        <LinstingCardCoffee coffees={coffees} />
       </div>
     </div>
   );
