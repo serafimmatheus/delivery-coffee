@@ -10,13 +10,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  user
+  admin
+}
+
+enum OrderStatus {
+  WAITING_FOR_PAYMENT
+  PAYMENT_CONFIRMED
+}
+
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
+  id        String    @id @default(uuid())
+  email     String    @unique
   name      String
   password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  role      Role      @default(user)
+  isActive  Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Order     Order[]
+  Address   Address[]
 
   @@map("users")
 }
@@ -31,6 +45,7 @@ model Coffee {
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
   coffeeToCategory CoffeeToCategory[]
+  OrderProduct     OrderProduct[]
 
   @@map("coffees")
 }
@@ -56,4 +71,47 @@ model CoffeeToCategory {
   category   Category @relation(fields: [categoryId], references: [id])
 
   @@map("coffees_to_categories")
+}
+
+model Order {
+  id           String         @id @default(cuid())
+  status       OrderStatus    @default(WAITING_FOR_PAYMENT)
+  userId       String
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orderProduct OrderProduct[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@map("orders")
+}
+
+model OrderProduct {
+  id        String   @id @default(cuid())
+  productId String
+  cooffee   Coffee   @relation(fields: [productId], references: [id])
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  basePrice Decimal  @db.Decimal(10, 2)
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("order-products")
+}
+
+model Address {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cep         String
+  rua         String
+  numero      String
+  complemento String?
+  bairro      String
+  cidade      String
+  estado      String   @db.VarChar(2)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("addresses")
 }

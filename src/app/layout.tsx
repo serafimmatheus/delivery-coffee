@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
 import HeaderDesktop from "@/components/headerDesktop";
+import { CartProvider } from "@/provider/cart/cart";
+import { AuthProvider } from "@/provider/auth/auth";
+import { ProviderCoffee } from "@/provider";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -21,9 +24,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-br">
-      <body className={`${roboto.className} bg-gray-200 text-gray-900`}>
-        <HeaderDesktop />
-        {children}
+      <body className={`${roboto.className} bg-gray-100 text-gray-900`}>
+        <ProviderCoffee>
+          <HeaderDesktop />
+
+          {children}
+        </ProviderCoffee>
       </body>
     </html>
   );

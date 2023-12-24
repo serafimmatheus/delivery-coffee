@@ -8,6 +8,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { Badge } from "antd";
 import Image from "next/image";
+import { Suspense } from "react";
 
 export default async function HomePage() {
   const coffees = await prismaClient.coffee.findMany({
@@ -21,19 +22,19 @@ export default async function HomePage() {
   });
 
   return (
-    <div className="p-8 max-w-[1440px] mx-auto mt-20">
-      <div className="flex justify-between gap-2">
-        <div className="flex flex-col w-1/2 gap-5">
-          <h2 className="text-5xl font-semibold">
+    <div className="p-8 max-w-[1440px] mx-auto mt-5">
+      <div className="flex justify-between gap-2 flex-col md:flex-row">
+        <div className="flex flex-col w-full gap-5 md:w-1/2">
+          <h2 className="text-4xl lg:text-5xl font-semibold">
             Encontre o café perfeito para qualquer hora do dia
           </h2>
 
-          <p className="text-xl font-light">
+          <p className="text-base lg:text-xl font-light">
             Com o Coffee Delivery você recebe seu café onde estiver, a qualquer
             hora
           </p>
 
-          <div className="grid grid-cols-2 gap-5 mt-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-8 lg:mt-16">
             <div className="flex items-center gap-4">
               <Badge className="bg-orange-700 p-2 rounded-full">
                 <ShoppingCart size={22} color="#ffffff" />
@@ -68,7 +69,7 @@ export default async function HomePage() {
           </div>
         </div>
 
-        <div className="flex w-1/2 items-center justify-center">
+        <div className="mt-10 flex w-full items-center md:mt-0 justify-center md:w-1/2">
           <Image
             src="/imagem.png"
             alt="Coffee delivery"
@@ -80,10 +81,12 @@ export default async function HomePage() {
         </div>
       </div>
 
-      <div className="mt-36">
+      <div className="mt-10 lg:mt-36">
         <h2 className="text-3xl font-semibold">Nossos cafés</h2>
 
-        <LinstingCardCoffee coffees={coffees} />
+        <Suspense fallback={"carregando..."}>
+          <LinstingCardCoffee coffees={coffees} />
+        </Suspense>
       </div>
     </div>
   );
