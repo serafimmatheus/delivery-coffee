@@ -30,13 +30,15 @@ export const CartContext = createContext<CartContextData>(
 );
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-  const [cart, setCart] = useState<CoffeeWithQuantity[]>(
-    JSON.parse(window.localStorage.getItem("@coffee-delivery:cart") || "[]")
-  );
+  const [cart, setCart] = useState<CoffeeWithQuantity[]>([]);
 
   useEffect(() => {
-    window.localStorage.setItem("@coffee-delivery:cart", JSON.stringify(cart));
+    localStorage.setItem("@coffee-delivery:cart", JSON.stringify(cart));
   }, [cart]);
+
+  useEffect(() => {
+    setCart(JSON.parse(localStorage.getItem("@coffee-delivery:cart") || "[]"));
+  }, []);
 
   // useEffect(() => {
   //   setCart(JSON.parse(localStorage.getItem("@coffee-delivery:cart") || "[]"));
