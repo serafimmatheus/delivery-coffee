@@ -1,48 +1,29 @@
 "use server";
 
 import { Product } from "@/app/dashboard/page";
-import { prismaClient } from "@/lib/prisma";
+import {
+  createCoffee,
+  deleteCoffee,
+  updateCoffee,
+} from "@/service/coffee.service";
 import { revalidatePath } from "next/cache";
 
 export const createProduct = async (state: any, data: Product) => {
-  const { name, price, description, coverImage } = data;
+  try {
+    const product = await createCoffee(data);
 
-  const slugModify = name.toLowerCase().replace(/\s+/g, "-");
+    if (!product) {
+      return "Error ao criar produto";
+    }
 
-  const product = await prismaClient.coffee.create({
-    data: {
-      name,
-      price: Number(price),
-      description,
-      slug: slugModify,
-      coverImage: coverImage || "",
-    },
-  });
-
-  if (!product) {
+    revalidatePath("/");
+  } catch (error) {
     return "Error ao criar produto";
   }
-
-  revalidatePath("/");
 };
 
 export const updateProduct = async (state: any, data: Product, id: string) => {
-  const { name, price, description, coverImage } = data;
-
-  const slugModify = name.toLowerCase().replace(/\s+/g, "-");
-
-  const product = await prismaClient.coffee.update({
-    where: {
-      id,
-    },
-    data: {
-      name,
-      price: Number(price),
-      description,
-      slug: slugModify,
-      coverImage,
-    },
-  });
+  const product = await updateCoffee(data, id);
 
   if (!product) {
     return "Error ao atualizar produto";
@@ -51,12 +32,8 @@ export const updateProduct = async (state: any, data: Product, id: string) => {
   revalidatePath("/");
 };
 
-export const deleteProduct = async (id: string) => {
-  const product = await prismaClient.coffee.delete({
-    where: {
-      id,
-    },
-  });
+export const deleteProduct = async (state: any, id: string) => {
+  const product = await deleteCoffee(id);
 
   if (!product) {
     return "Error ao deletar produto";

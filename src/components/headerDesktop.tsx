@@ -1,6 +1,6 @@
 "use client";
 
-import { ShoppingCart, UserMinus } from "@phosphor-icons/react/dist/ssr";
+import { ShoppingCart, UserMinus, List } from "@phosphor-icons/react/dist/ssr";
 import { Badge, Button } from "antd";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,14 +8,20 @@ import { useState } from "react";
 import CartDrawer from "./cart";
 import { useAuthProviver } from "@/provider/auth/auth";
 import { logout } from "@/actions/auth.actions";
+import MenuDrawer from "./menu-drawer";
 
 const HeaderDesktop = () => {
   const [open, setOpen] = useState<boolean>(false);
+  const [openMenu, setOpenMenu] = useState<boolean>(false);
 
   const { user } = useAuthProviver();
 
   const showDrawer = () => {
     setOpen(true);
+  };
+
+  const showDrawerMenu = () => {
+    setOpenMenu(true);
   };
 
   const signOutApp = async () => {
@@ -48,7 +54,15 @@ const HeaderDesktop = () => {
           </button>
         </div>
 
-        {/* <BadgeAddress userId={user?.id ?? ""} /> */}
+        {user && (
+          <Button
+            onClick={showDrawerMenu}
+            size="large"
+            className="bg-orange-50 p-2 rounded-lg flex items-center gap-2 border border-orange-700 hover:border-orange-500"
+          >
+            <List size={22} color="#C47F17" />
+          </Button>
+        )}
 
         <Button
           onClick={showDrawer}
@@ -57,6 +71,8 @@ const HeaderDesktop = () => {
         >
           <ShoppingCart size={22} color="#C47F17" />
         </Button>
+
+        <MenuDrawer open={openMenu} setOpen={setOpenMenu} />
 
         <CartDrawer open={open} setOpen={setOpen} />
       </div>

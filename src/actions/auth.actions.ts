@@ -37,19 +37,24 @@ export const login = async (state: any, data: LoginType) => {
 
   if (!user) {
     // TODO: Usar optimistic update
-    return "Incorrect login/password";
+    return {
+      error: "Incorrect login/password",
+    };
   }
 
   const passwordMatch = await bcrypt.compare(password, user.password);
 
   if (!passwordMatch) {
-    return "Incorrect login/password";
+    return {
+      error: "Incorrect login/password",
+    };
   }
 
   const newData = {
     id: user.id,
     name: user.name,
     email: user.email,
+    role: user.role,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt,
   };

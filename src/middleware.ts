@@ -5,7 +5,6 @@ import { isSessionValid } from "./service/auth.service";
 const publicRoutes = ["/login", "/cadastro", "/", "/checkout"];
 const publicRoutesAuth = ["/login", "/cadastro"];
 
-// This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   if (publicRoutes.includes(pathname)) {

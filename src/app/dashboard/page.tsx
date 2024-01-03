@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Input, Modal, Upload, notification } from "antd";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
-import { storage } from "@/service/firebase";
+import { storage } from "@/lib/firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { useState } from "react";
 import type { RcFile, UploadProps } from "antd/es/upload";
@@ -52,6 +52,7 @@ const DashboardPage = () => {
     resolver: zodResolver(schemaProducts),
   });
 
+  const { pending } = useFormStatus();
   const [state, formAction] = useFormState(createProduct, null);
 
   const [api, contextHolder] = notification.useNotification();
@@ -222,7 +223,9 @@ const DashboardPage = () => {
               )}
             </div>
 
-            <SubmitButton />
+            <Button disabled={pending} htmlType="submit">
+              {pending ? "Cadastrando..." : "Cadastrar Produto"}
+            </Button>
           </form>
         </div>
       </div>
@@ -231,12 +234,3 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button disabled={pending} htmlType="submit">
-      {pending ? "Cadastrando" : "Cadastrar Produto"}
-    </Button>
-  );
-}

@@ -18,36 +18,35 @@ const schemaLogin = z.object({
     .min(6, { message: "Min 6 caracteres." }),
 });
 
-type NotificationType = "success" | "info" | "warning" | "error";
-
 export type LoginType = z.infer<typeof schemaLogin>;
 
 const LoginPage = () => {
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<LoginType>({
     resolver: zodResolver(schemaLogin),
   });
 
-  const [api, contextHolder] = notification.useNotification();
+  const [toast, contextHolder] = notification.useNotification();
 
   const [state, formAction] = useFormState(login, null);
 
-  const openNotificationWithIcon = (type: NotificationType) => {
-    api[type]({
-      message: state || "",
-      description:
-        state === ""
-          ? "Login realizado com sucesso."
-          : "Erro ao realizar login.",
-    });
-  };
-
   const onSubmitLogin = async (data: LoginType) => {
     formAction(data);
-    openNotificationWithIcon(state ? "success" : "error");
+
+    if (state?.error) {
+      toast["error"]({
+        message: "Erro ao fazer login.",
+        description: "E-mail ou senha inválidos.",
+      });
+    } else {
+      toast["success"]({
+        message: "Login realizado com sucesso.",
+        description: "Seja bem-vindo.",
+      });
+    }
   };
 
   return (
@@ -110,7 +109,9 @@ const LoginPage = () => {
                 </p>
               </div>
 
-              <SubmitButton />
+              <Button disabled={isSubmitting} htmlType="submit">
+                {isSubmitting ? "Entrando..." : "Entrar"}
+              </Button>
 
               <div className="flex items-center gap-2 justify-end">
                 <span> Não possui conta?</span>
@@ -127,12 +128,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button disabled={pending} htmlType="submit">
-      {pending ? "Entrando..." : "Entrar"}
-    </Button>
-  );
-}
